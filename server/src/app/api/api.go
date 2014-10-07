@@ -4,6 +4,7 @@ import (
 	"../services"
 	"fmt"
 	"github.com/go-martini/martini"
+	"github.com/julianduniec/martini-jsonp"
 	"github.com/martini-contrib/render"
 	"log"
 	"net/http"
@@ -26,6 +27,10 @@ func (this *Api) Run() {
 
 	m.Use(render.Renderer(render.Options{
 		Charset: "UTF-8",
+	}))
+
+	m.Use(jsonp.JSONP(jsonp.Options{
+		ParameterName: "jsonp",
 	}))
 
 	m.Get("/", func(args martini.Params, r render.Render) {

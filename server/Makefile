@@ -41,7 +41,8 @@ vendor_clean:
 vendor_get: vendor_clean
 	GOPATH=${PWD}/_vendor go get -d -u -v \
 	github.com/go-martini/martini \
-    github.com/martini-contrib/render
+    github.com/martini-contrib/render \
+    github.com/JulianDuniec/martini-jsonp
 
 vendor_update: vendor_get
 	rm -rf `find ./_vendor/src -type d -name .git` \
