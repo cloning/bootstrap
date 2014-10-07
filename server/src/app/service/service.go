@@ -1,4 +1,4 @@
-package core
+package service
 
 type Service struct {
 	name string
@@ -15,7 +15,7 @@ func NewService(name string) *Service {
 
 func (this *Service) GetUser() *User {
 	return &User{
-		"Julian",
+		this.name,
 		29,
 	}
 }

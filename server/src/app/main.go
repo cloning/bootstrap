@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	service := core.NewService("Bootstrap Service")
+	service := service.NewService("Bootstrap Service")
 	api := api.NewApi(service, 8080)
 	api.Run()
 }

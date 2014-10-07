@@ -14,7 +14,7 @@ type Api struct {
 	port    int
 }
 
-func NewApi(service *core.Service, port int) *Api {
+func NewApi(service *service.Service, port int) *Api {
 	return &Api{
 		service,
 		port,
