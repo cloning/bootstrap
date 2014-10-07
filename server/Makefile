@@ -9,7 +9,7 @@ export GOPATH
 default: build
 
 build: vet
-	go build -v -o ./bin/main_app ./src/main_app
+	go build -v -o ./bin/app ./src/app
 
 doc:
 	godoc -http=:6060 -index
@@ -24,7 +24,7 @@ lint:
 	golint ./src
 
 run: build
-	./bin/main_app
+	./bin/app
 
 test:
 	go test ./src/...
@@ -40,7 +40,8 @@ vendor_clean:
 # that existing location as the destination.
 vendor_get: vendor_clean
 	GOPATH=${PWD}/_vendor go get -d -u -v \
-	github.com/go-martini/martini 
+	github.com/go-martini/martini \
+    github.com/martini-contrib/render
 
 vendor_update: vendor_get
 	rm -rf `find ./_vendor/src -type d -name .git` \
