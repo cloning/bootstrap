@@ -7,6 +7,7 @@ var vendor      = require('gulp-concat-vendor');
 var jshint      = require('gulp-jshint');
 var connect     = require('connect');
 var serveStatic = require('serve-static');
+var fs          = require('fs');
 
 gulp.task('css', function() {
     gulp.src('src/css/main.styl')
@@ -21,15 +22,13 @@ gulp.task('html', function() {
         .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('scripts:bower', function() {
-    bower({cwd : 'src/scripts/vendor/'});
-});
-
 gulp.task('scripts:vendor', function() {
-    gulp.src('src/scripts/vendor/bower_components/*')
-        .pipe(vendor('vendor.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('dist/js'));
+    bower({cwd : 'src/scripts/vendor/'}).on('end', function() {
+        gulp.src('src/scripts/vendor/bower_components/*')
+            .pipe(vendor('vendor.js'))
+            .pipe(uglify())
+            .pipe(gulp.dest('dist/js'));
+    });    
 });
 
 gulp.task('scripts:app', function() {
@@ -49,7 +48,15 @@ gulp.task('watch', ['default'], function() {
 });
 
 gulp.task('develop', ['default', 'watch'], function() {
-    connect().use(serveStatic(__dirname + '/dist')).listen(3000);
+    connect()
+        .use(serveStatic(__dirname + '/dist'))
+        .use(function(req, res) {
+            // Aways serve index.html
+            res.end(
+                fs.readFileSync(
+                    'dist/index.html'));
+        })
+        .listen(3000);
 });
 
-gulp.task('default', ['css', 'html', 'scripts:bower', 'scripts:vendor', 'scripts:app']);
+gulp.task('default', ['css', 'html', 'scripts:vendor', 'scripts:app']);

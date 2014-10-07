@@ -1,4 +1,4 @@
 $(document).ready(function() {
-    var x = 1;
-    alert('x', 'y');
+    $('html body').append($('<div>', {class : 'main'}));
+    $('html body').css('background-color', 'red');
 });
