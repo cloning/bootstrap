@@ -2,11 +2,11 @@ package main
 
 import (
 	"./api"
-	"./service"
+	"./services"
 )
 
 func main() {
-	service := service.NewService("Bootstrap Service")
+	service := services.NewService("Bootstrap Service")
 	api := api.NewApi(service, 8080)
 	api.Run()
 }

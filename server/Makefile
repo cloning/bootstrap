@@ -8,7 +8,7 @@ export GOPATH
 
 default: build
 
-build: vet
+build: vet test
 	go build -v -o ./bin/app ./src/app
 
 doc:

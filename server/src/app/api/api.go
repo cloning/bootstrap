@@ -1,7 +1,7 @@
 package api
 
 import (
-	"../service"
+	"../services"
 	"fmt"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
@@ -10,11 +10,11 @@ import (
 )
 
 type Api struct {
-	service *core.Service
+	service *services.Service
 	port    int
 }
 
-func NewApi(service *service.Service, port int) *Api {
+func NewApi(service *services.Service, port int) *Api {
 	return &Api{
 		service,
 		port,
