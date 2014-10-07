@@ -5,6 +5,8 @@ var uglify      = require('gulp-uglify');
 var concat      = require('gulp-concat');
 var vendor      = require('gulp-concat-vendor');
 var jshint      = require('gulp-jshint');
+var connect     = require('connect');
+var serveStatic = require('serve-static');
 
 gulp.task('css', function() {
     gulp.src('src/css/main.styl')
@@ -12,6 +14,11 @@ gulp.task('css', function() {
             compress: true
         }))
         .pipe(gulp.dest('dist/css'));
+});
+
+gulp.task('html', function() {
+    gulp.src('src/index.html')
+        .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('scripts:bower', function() {
@@ -34,11 +41,15 @@ gulp.task('scripts:app', function() {
         .pipe(gulp.dest('dist/js'));
 });
 
-
 gulp.task('watch', ['default'], function() {
+    gulp.watch('src/index',                             ['html']);
     gulp.watch('src/scripts/vendor/bower.json',         ['scripts:bower', 'scripts:vendor']);
     gulp.watch('src/**/*.js',                           ['scripts:app']);
     gulp.watch('src/**/*.styl',                         ['css']);
 });
 
-gulp.task('default', ['css', 'scripts:bower', 'scripts:vendor', 'scripts:app']);
+gulp.task('develop', ['default', 'watch'], function() {
+    connect().use(serveStatic(__dirname + '/dist')).listen(3000);
+});
+
+gulp.task('default', ['css', 'html', 'scripts:bower', 'scripts:vendor', 'scripts:app']);
