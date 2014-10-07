@@ -1,0 +1,1 @@
+This folder should contain styles for all layouts
