@@ -13,5 +13,11 @@ func TestJsonPShouldWrapResponse(t *testing.T) {
 		if matched, err := regexp.Match("callback(.*)", body); !matched || err != nil {
 			t.Errorf("Not wrapped in callback:%s", body)
 		}
+
+		body, _, _ = Get("/")
+
+		if matched, err := regexp.Match("callback(.*)", body); matched || err != nil {
+			t.Errorf("Should not be wrapped in callback:%s", body)
+		}
 	})
 }
