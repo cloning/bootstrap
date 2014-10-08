@@ -4,21 +4,27 @@ import (
 	"../services"
 	"fmt"
 	"github.com/go-martini/martini"
+	"github.com/hydrogen18/stoppableListener"
 	"github.com/julianduniec/martini-jsonp"
 	"github.com/martini-contrib/render"
-	"log"
+	"net"
 	"net/http"
+	"sync"
 )
 
 type Api struct {
 	service *services.Service
 	port    int
+	wg      sync.WaitGroup
+	sl      *stoppableListener.StoppableListener
 }
 
-func NewApi(service *services.Service, port int) *Api {
+func NewApi(service *services.Service, port int, wg sync.WaitGroup) *Api {
 	return &Api{
 		service,
 		port,
+		wg,
+		nil,
 	}
 }
 
@@ -38,9 +44,32 @@ func (this *Api) Run() {
 		r.JSON(200, user)
 	})
 
-	log.Fatal(
-		http.ListenAndServe(
-			// Listen and serve expects eg. ':8080'
-			fmt.Sprintf(":%d", this.port),
-			m))
+	this.listenAndServe(m)
+}
+
+func (this *Api) Stop() {
+	this.sl.Stop()
+}
+
+func (this *Api) listenAndServe(m *martini.ClassicMartini) {
+	// Notify waitgroup that we have one task
+	this.wg.Add(1)
+	defer this.wg.Done()
+
+	port := fmt.Sprintf(":%d", this.port)
+	listener, err := net.Listen("tcp", port)
+
+	if err != nil {
+		panic(err)
+	}
+
+	this.sl, err = stoppableListener.New(listener)
+
+	if err != nil {
+		panic(err)
+	}
+
+	http.Handle("/", m)
+	server := http.Server{}
+	server.Serve(this.sl)
 }

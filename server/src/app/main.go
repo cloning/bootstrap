@@ -7,7 +7,10 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 	"path/filepath"
+	"sync"
+	"syscall"
 )
 
 var configurationFileFlag = flag.String("configurationFile", "", "Location of configuration file")
@@ -25,11 +28,32 @@ func main() {
 	// Initialize any services here
 	service := services.NewService("Bootstrap Service")
 
-	// Initialize the API
-	api := api.NewApi(service, conf.Api.Port)
+	// Waitgroup used for graceful cleanup on exit
+	var wg sync.WaitGroup
 
-	// Run the api (blocking)
-	api.Run()
+	// Initialize the API
+	api := api.NewApi(service, conf.Api.Port, wg)
+
+	// Run the api
+	go api.Run()
+
+	// Block thread until OS interrupts
+	blockUntilOsStop()
+
+	// OS interrupted, stop running api
+	api.Stop()
+
+	// Wait for cleanup
+	wg.Wait()
+}
+
+func blockUntilOsStop() {
+	stop := make(chan os.Signal)
+	signal.Notify(stop, syscall.SIGINT)
+	select {
+	case signal := <-stop:
+		fmt.Printf("Caught stop signal: %v", signal)
+	}
 }
 
 /*

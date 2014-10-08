@@ -44,7 +44,8 @@ vendor_get: vendor_clean
 	github.com/go-martini/martini \
     github.com/martini-contrib/render \
     github.com/JulianDuniec/martini-jsonp \
-    launchpad.net/goyaml
+    launchpad.net/goyaml \
+    github.com/hydrogen18/stoppableListener
 
 vendor_update: vendor_get
 	rm -rf `find ./_vendor/src -type d -name .git` \
