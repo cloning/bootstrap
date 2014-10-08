@@ -1,4 +1,4 @@
-package api_test
+package api
 
 import (
 	"../../../src/app/api"
@@ -15,7 +15,7 @@ const (
 
 type apifn func(*api.Api)
 
-func get(path string) ([]byte, *http.Response, error) {
+func Get(path string) ([]byte, *http.Response, error) {
 	apiUrl := fmt.Sprintf("http://localhost:%d", PORT)
 	resp, err := http.Get(apiUrl + path)
 	if err != nil {
@@ -28,7 +28,7 @@ func get(path string) ([]byte, *http.Response, error) {
 	return body, resp, err
 }
 
-func withApi(fn apifn) {
+func WithApi(fn apifn) {
 	var wg sync.WaitGroup
 	var service = services.NewService("Test")
 	api := api.NewApi(service, PORT, wg)

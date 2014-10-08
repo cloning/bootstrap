@@ -1,4 +1,4 @@
-package api_test
+package api
 
 import (
 	"../../../src/app/api"
@@ -7,8 +7,8 @@ import (
 )
 
 func TestJsonPShouldWrapResponse(t *testing.T) {
-	withApi(func(api *api.Api) {
-		body, _, _ := get("/?jsonp=callback")
+	WithApi(func(api *api.Api) {
+		body, _, _ := Get("/?jsonp=callback")
 
 		if matched, err := regexp.Match("callback(.*)", body); !matched || err != nil {
 			t.Errorf("Not wrapped in callback:%s", body)
