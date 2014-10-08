@@ -10,6 +10,7 @@ default: build
 
 build: vet test
 	go build -v -o ./bin/app ./src/app
+	cp ./configuration/configuration.yaml ./bin/configuration.yaml
 
 doc:
 	godoc -http=:6060 -index
@@ -42,7 +43,8 @@ vendor_get: vendor_clean
 	GOPATH=${PWD}/_vendor go get -d -u -v \
 	github.com/go-martini/martini \
     github.com/martini-contrib/render \
-    github.com/JulianDuniec/martini-jsonp
+    github.com/JulianDuniec/martini-jsonp \
+    launchpad.net/goyaml
 
 vendor_update: vendor_get
 	rm -rf `find ./_vendor/src -type d -name .git` \
