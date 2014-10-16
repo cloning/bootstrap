@@ -15,11 +15,11 @@ import (
 type Api struct {
 	service *services.Service
 	port    int
-	wg      sync.WaitGroup
+	wg      *sync.WaitGroup
 	sl      *stoppableListener.StoppableListener
 }
 
-func NewApi(service *services.Service, port int, wg sync.WaitGroup) *Api {
+func NewApi(service *services.Service, port int, wg *sync.WaitGroup) *Api {
 	return &Api{
 		service,
 		port,
