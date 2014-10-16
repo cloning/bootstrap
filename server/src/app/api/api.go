@@ -69,7 +69,7 @@ func (this *Api) listenAndServe(m *martini.ClassicMartini) {
 		panic(err)
 	}
 
-	http.Handle("/", m)
 	server := http.Server{}
+	server.Handler = m
 	server.Serve(this.sl)
 }
