@@ -1,2 +1,11 @@
 api:
     port: 4000
+
+auth-service:
+    accounts-file:          admin-accounts.txt
+    token-directory:        data/tokens
+    credentials-directory:  data/credentials
+
+user-service:
+    database-host:          localhost
+    database:               intellizen

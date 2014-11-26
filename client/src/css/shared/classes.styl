@@ -1,0 +1,32 @@
+// Typography
+
+
+
+@font-face 
+    font-family Hero-Regular
+    src url("/fonts/Slim_Joe.otf") format("opentype")
+
+h1.hero
+    font-family Hero-Regular
+    font-size 30px
+    @media medium-screen-up
+        font-size 55px
+    @media large-screen-up
+        font-size 70px
+    @media huge-screen-up
+        font-size 95px
+h3.hero, h4.hero, h5.hero
+    font-family Hero-Regular
+
+
+// Alerts
+
+.alert
+    padding 20px
+.alert.error
+    background action-warning-color 
+    color action-warning-complement-color 
+    border-bottom 5px solid action-warning-deep-color
+
+.hide
+    display none

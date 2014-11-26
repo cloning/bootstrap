@@ -1,0 +1,31 @@
+.btn
+    display inline-block
+    border 1px
+    padding 10px
+    background transparent
+    cursor pointer    
+    background transparent
+    border 2px solid #000
+    color #000
+    &:hover
+        // Overrides for link-buttons
+        text-decoration none
+        border-bottom 2px solid #000
+.btn.large
+    padding 7px 10px
+    font-size 15px
+    
+.btn.primary
+    background primary-color
+    border 0px
+    color primary-complement-color
+    
+.btn.secondary
+    background secondary-color
+    border 0px
+    color secondary-complement-color
+    
+@media medium-screen-up
+    .btn.large
+        padding 15px 20px
+        font-size 1.2em

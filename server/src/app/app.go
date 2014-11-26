@@ -3,7 +3,8 @@ package main
 import (
 	"./api"
 	"./configuration"
-	"./services"
+	"./services/auth"
+	"./services/user"
 	"errors"
 	"fmt"
 	"os"
@@ -31,10 +32,11 @@ func NewApp(configurationFile string) (*App, error) {
 	var wg sync.WaitGroup
 
 	// Initialize any services here
-	service := services.NewService("Bootstrap Service")
+	authService := createAuthService(conf)
+	userService := createUserService(conf)
 
 	// Initialize the API
-	api := api.NewApi(service, conf.Api.Port, wg)
+	api := api.NewApi(conf.Api.Port, &wg, authService, userService)
 
 	app := &App{
 		Configuration: conf,
@@ -43,6 +45,35 @@ func NewApp(configurationFile string) (*App, error) {
 	}
 
 	return app, nil
+}
+
+func createUserService(conf *configuration.Configuration) *user.UserService {
+	userService, err := user.NewUserService(conf.UserService.DatabaseHost, conf.UserService.Database)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return userService
+}
+
+func createAuthService(conf *configuration.Configuration) *auth.AuthService {
+	appLocation, err := getAppLocation()
+
+	if err != nil {
+		panic(err)
+	}
+
+	adminFile := appLocation + "/" + conf.AuthService.AccountsFile
+
+	authService, err := auth.NewAuthService(adminFile, conf.AuthService.DatabaseHost, conf.AuthService.Database)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return authService
+
 }
 
 func (this *App) Run() {
@@ -88,6 +119,10 @@ func loadConfiguration(configurationFile string) (*configuration.Configuration, 
    Get the default configuration file (same directory as app)
 */
 func getDefaultConfiguration() (string, error) {
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	dir, err := getAppLocation()
 	return dir + "/configuration.yaml", err
+}
+
+func getAppLocation() (string, error) {
+	return filepath.Abs(filepath.Dir(os.Args[0]))
 }

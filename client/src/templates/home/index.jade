@@ -1,0 +1,45 @@
+extends ../layout/centered-x
+
+include ../components/ribbon
+
+block content
+    .home-page
+        .nav
+            ul
+                li
+                    a(href='/') Menu Item
+                li 
+                    a(href='/') Menu Item
+                li 
+                    a(href='/') Menu Item
+                li 
+                    a.login(href='/auth/login') Login
+
+        .header
+            .inner
+                h1.hero Bootstrap
+                h3.hero With go!
+                .cta-buttons
+                    a.btn.large.primary(href='/auth/register') Create account
+                    span or 
+                        a Read more
+                mixin ribbon
+
+        .centered-content
+            #introduction
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                p Some content about this site
+                    
+                    

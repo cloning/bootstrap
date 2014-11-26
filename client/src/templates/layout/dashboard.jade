@@ -1,0 +1,15 @@
+include ../components/ribbon
+.dashboard
+    mixin ribbon
+    .dashboard-menu
+        ul
+            li
+                a(href='/dashboard') Home
+            li
+                a(href='/dashboard') Menu Item
+            li
+                a(href='/dashboard') Menu Item
+            li.settings
+                a(href='/dashboard/me') Settings
+    .dashboard-content
+        block content

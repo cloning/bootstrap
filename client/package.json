@@ -9,6 +9,7 @@
     "gulp-jshint": "^1.8.5",
     "jshint-stylish": "^1.0.0",
     "connect": "^3.2.0",
-    "serve-static": "^1.6.3"
+    "serve-static": "^1.6.3",
+    "templatizer": "^1.0.1"
   }
 }

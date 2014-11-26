@@ -1,0 +1,26 @@
+extends ../layout/centered
+
+include ../components/ribbon
+
+block content
+    #login-form
+        .container
+            mixin ribbon
+            form
+                h3.form-header Login
+                .login-errors.alert.error.hide
+                    p Invalid credentials
+                .control-group
+                    label(for='email') Email
+                    .controls
+                        input.text.email(type='text', name='email', placeholder="your@email.com")
+                .control-group
+                    label(for='password') Password
+                    .controls
+                        input.text.password(type='password', name='password', placeholder="password")
+                .form-actions
+                    button.btn.large.primary(type='submit') Login
+                    span or &nbsp;
+                        a(href='/') go back
+            p.no-account Don't have an account? 
+                a(href='/auth/register') Register here

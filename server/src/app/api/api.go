@@ -1,75 +1,68 @@
 package api
 
 import (
-	"../services"
-	"fmt"
 	"github.com/go-martini/martini"
-	"github.com/hydrogen18/stoppableListener"
 	"github.com/julianduniec/martini-jsonp"
+	"github.com/martini-contrib/binding"
+	"github.com/martini-contrib/cors"
 	"github.com/martini-contrib/render"
-	"net"
 	"net/http"
-	"sync"
 )
 
-type Api struct {
-	service *services.Service
-	port    int
-	wg      *sync.WaitGroup
-	sl      *stoppableListener.StoppableListener
-}
+/*
+	Setup middleware
+*/
+func (this *Api) middleware(m *martini.ClassicMartini) {
 
-func NewApi(service *services.Service, port int, wg *sync.WaitGroup) *Api {
-	return &Api{
-		service,
-		port,
-		wg,
-		nil,
-	}
-}
-
-func (this *Api) Run() {
-	m := martini.Classic()
-
+	// Use render rendering-engine
 	m.Use(render.Renderer(render.Options{
 		Charset: "UTF-8",
 	}))
 
+	// Allow JSONP
 	m.Use(jsonp.JSONP(jsonp.Options{
 		ParameterName: "jsonp",
 	}))
 
-	m.Get("/", func(args martini.Params, r render.Render) {
-		user := this.service.GetUser()
-		r.JSON(200, user)
-	})
-
-	this.listenAndServe(m)
+	// Allow cross origin post
+	m.Use(cors.Allow(&cors.Options{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders: []string{"Origin", "Content-Type", "Authorization"},
+	}))
 }
 
-func (this *Api) Stop() {
-	this.sl.Stop()
+/*
+	Middleware that checks that the user
+	is authenticated, and passes user to the endpoint
+*/
+func (this *Api) authorized() martini.Handler {
+	return func(w http.ResponseWriter, r *http.Request, c martini.Context) {
+		//TODO: Email should be userId, DAMNIT
+		isValid, email := this.authService.ValidateToken(r.Header.Get("Authorization"))
+		if isValid == false {
+			w.WriteHeader(403)
+		} else {
+			//TODO: Handle email
+			user, _ := this.userService.FindFromEmail(email)
+			c.Map(user)
+		}
+	}
 }
 
-func (this *Api) listenAndServe(m *martini.ClassicMartini) {
-	// Notify waitgroup that we have one task
-	this.wg.Add(1)
-	defer this.wg.Done()
+/*
+	Setup routing
+*/
+func (this *Api) route(m *martini.ClassicMartini) {
 
-	port := fmt.Sprintf(":%d", this.port)
-	listener, err := net.Listen("tcp", port)
+	/*
+		Authentication
+	*/
 
-	if err != nil {
-		panic(err)
-	}
+	m.Post("/auth/login", binding.Json(AuthLoginRequest{}), this.auth_login)
 
-	this.sl, err = stoppableListener.New(listener)
+	m.Post("/auth/register", binding.Json(AuthRegisterRequest{}), this.auth_register)
 
-	if err != nil {
-		panic(err)
-	}
+	m.Get("/auth/token/validate", this.authorized(), this.auth_token_validate)
 
-	server := http.Server{}
-	server.Handler = m
-	server.Serve(this.sl)
 }

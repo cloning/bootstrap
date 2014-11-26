@@ -8,6 +8,7 @@ var jshint      = require('gulp-jshint');
 var connect     = require('connect');
 var serveStatic = require('serve-static');
 var fs          = require('fs');
+var templatizer = require('templatizer');
 
 gulp.task('css', function() {
     gulp.src('src/css/main.styl')
@@ -17,8 +18,13 @@ gulp.task('css', function() {
         .pipe(gulp.dest('dist/css'));
 });
 
+gulp.task('images', function() {
+    gulp.src('src/images/*')
+        .pipe(gulp.dest('dist/images'));
+});
+
 gulp.task('html', function() {
-    gulp.src('src/index.html')
+    gulp.src('src/*.html')
         .pipe(gulp.dest('dist/'));
 });
 
@@ -31,20 +37,31 @@ gulp.task('scripts:vendor', function() {
     });    
 });
 
+gulp.task('fonts', function() {
+    gulp.src('src/fonts/**')
+        .pipe(gulp.dest('dist/fonts'));
+});
+
+gulp.task('scripts:templates', function() {
+    templatizer('src/templates/', 'dist/js/templates.js');
+});
+
 gulp.task('scripts:app', function() {
-    gulp.src('src/scripts/app/*')
+    gulp.src('src/scripts/app/**')
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'))
         .pipe(concat('app.js'))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest('dist/js'));
 });
 
 gulp.task('watch', ['default'], function() {
-    gulp.watch('src/index',                             ['html']);
+    gulp.watch('src/images/*',                          ['images']);
+    gulp.watch('src/*.html',                            ['html']);
     gulp.watch('src/scripts/vendor/bower.json',         ['scripts:bower', 'scripts:vendor']);
     gulp.watch('src/**/*.js',                           ['scripts:app']);
     gulp.watch('src/**/*.styl',                         ['css']);
+    gulp.watch('src/templates/**',                      ['scripts:templates']);
 });
 
 gulp.task('develop', ['default', 'watch'], function() {
@@ -57,6 +74,7 @@ gulp.task('develop', ['default', 'watch'], function() {
                     'dist/index.html'));
         })
         .listen(3000);
+    console.log("Listening at localhost:3000/");
 });
 
-gulp.task('default', ['css', 'html', 'scripts:vendor', 'scripts:app']);
+gulp.task('default', ['css', 'html', 'images', 'scripts:vendor', 'scripts:app', 'scripts:templates', 'fonts']);

@@ -1,0 +1,30 @@
+extends ../layout/centered
+
+include ../components/ribbon
+
+block content
+    #register-form
+        .container
+            mixin ribbon
+            form
+                h3.form-header Create an account
+                .registration-errors.alert.error.hide
+                .control-group
+                    label(for='password') Your name
+                    .controls
+                        input.text.full-name(type='text', name='fullName', placeholder="Eg. John Doe")
+                .control-group
+                    label(for='email') Email
+                    .controls
+                        input.text.email(type='text', name='email', placeholder="Eg. your@email.com")
+                .control-group
+                    label(for='password') Password
+                    .controls
+                        input.text.password(type='password', name='password', placeholder="E.g ******")
+                .form-actions
+                    button.btn.large.primary(type='submit') Register
+                    span or &nbsp;
+                        a(href='/') go back
+
+            p.has-account Already have an account? 
+                a(href='/auth/login') Proceed to login

@@ -1,4 +1,80 @@
-.main
-    background background-color
-    width 200px
-    height 200px
+#container
+    height 100%
+    
+
+.dashboard
+    cf()
+    height 100%
+    width 100%
+    .dashboard-menu
+        display none
+
+.centered-x
+    cf()
+    height 100%
+    width 100%
+    .centered-content
+        width 100% 
+    
+.centered-layout
+    cf()
+    height 100%
+    width 100%
+    display table
+    background shade-color
+    .content-container
+            .vertical-center
+                div:first-child
+                    background #FFF
+                    box-shadow 2px 2px #CCC
+            
+@media medium-screen-up 
+
+    .dashboard
+        .dashboard-menu
+            col(3/12, 0/12)
+            height 100%
+            display block
+        .dashboard-content
+            col(9/12, 0/12)
+            padding-top 20px
+    .centered-layout
+        .content-container
+            height 100%
+            width 100%
+            display table
+            col(10/12, 1/12)
+            .vertical-center
+                display table-cell
+                vertical-align middle
+                height 100%
+                width 100%
+    
+    .centered-x
+        .centered-content
+            col(10/12, 1/12)
+        
+            
+@media large-screen-up 
+
+    .dashboard
+        .dashboard-menu
+            col(2/12, 0/12)
+            height 100%
+        .dashboard-content
+            col(10/12, 0/12)
+            
+    .centered-layout
+        .content-container
+            col(8/12, 2/12)
+    .centered-x
+        .centered-content
+            col(8/12, 2/12)
+            
+@media huge-screen-up 
+    .centered-layout
+        .content-container
+            col(6/12, 3/12)
+    .centered-x
+        .centered-content
+            col(6/12, 3/12)

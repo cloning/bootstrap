@@ -1,0 +1,69 @@
+.control-group
+    clearfix()
+    margin 30px
+    label 
+        font-size 12px
+    .controls
+        margin-top 5px
+        .help-text
+            margin-top 10px 
+            font-size 12px
+            padding 3px
+        select
+            margin-top 10px
+            
+input.text:disabled
+    background shade-color        
+input.text
+    width 200px
+    @media medium-screen-up
+        width 250px
+    @media large-screen-up
+        width 300px
+    padding 10px
+    border 1px solid line-color
+
+.form-actions
+    border-top 1px solid line-color
+    margin-top 40px
+    padding 20px
+    text-align center
+    span
+        margin 20px
+
+.form-header
+    border-bottom 1px solid line-color
+    padding 20px 30px
+
+.form-section-header
+    margin-top -1px // Compensate border when after a form header
+    border-bottom 1px solid line-color
+    border-top 1px solid line-color
+    padding 10px 20px
+    background shade-color
+
+@media medium-screen-up
+    .control-group
+        display table
+        height auto
+        width 100%
+        margin 20px
+        label 
+            display table-cell
+            vertical-align top
+            padding-top 10px
+            width 30%
+            text-align right
+            padding-right 20px
+            font-size 14px
+        .controls
+            margin-top 0px
+            display table-cell
+            vertical-align middle
+            float left
+            width 70%
+    input.text
+        width 250px
+@media large-screen-up
+    input.text
+        width 300px
