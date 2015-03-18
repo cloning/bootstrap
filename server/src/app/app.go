@@ -3,8 +3,6 @@ package main
 import (
 	"./api"
 	"./configuration"
-	"./services/auth"
-	"./services/user"
 	"errors"
 	"fmt"
 	"os"
@@ -31,12 +29,8 @@ func NewApp(configurationFile string) (*App, error) {
 	// Waitgroup used for graceful cleanup on exit
 	var wg sync.WaitGroup
 
-	// Initialize any services here
-	authService := createAuthService(conf)
-	userService := createUserService(conf)
-
 	// Initialize the API
-	api := api.NewApi(conf.Api.Port, &wg, authService, userService)
+	api := api.NewApi(conf.Api.Port, &wg)
 
 	app := &App{
 		Configuration: conf,
@@ -45,35 +39,6 @@ func NewApp(configurationFile string) (*App, error) {
 	}
 
 	return app, nil
-}
-
-func createUserService(conf *configuration.Configuration) *user.UserService {
-	userService, err := user.NewUserService(conf.UserService.DatabaseHost, conf.UserService.Database)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return userService
-}
-
-func createAuthService(conf *configuration.Configuration) *auth.AuthService {
-	appLocation, err := getAppLocation()
-
-	if err != nil {
-		panic(err)
-	}
-
-	adminFile := appLocation + "/" + conf.AuthService.AccountsFile
-
-	authService, err := auth.NewAuthService(adminFile, conf.AuthService.DatabaseHost, conf.AuthService.Database)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return authService
-
 }
 
 func (this *App) Run() {

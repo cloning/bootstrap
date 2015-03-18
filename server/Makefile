@@ -11,7 +11,6 @@ default: build
 build: vet test
 	go build -v -o ./bin/app ./src/app
 	cp ./configuration/configuration.yaml ./bin/configuration.yaml
-	cp ./configuration/admin-accounts.txt ./bin/admin-accounts.txt
 	
 doc:
 	godoc -http=:6060 -index

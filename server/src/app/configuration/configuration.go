@@ -12,24 +12,11 @@ type Api struct {
 	Port int `yaml:"port"`
 }
 
-type AuthService struct {
-	AccountsFile string `yaml:"accounts-file"`
-	DatabaseHost string `yaml:"database-host"`
-	Database     string `yaml:"database"`
-}
-
-type UserService struct {
-	DatabaseHost string `yaml:"database-host"`
-	Database     string `yaml:"database"`
-}
-
 /*
    Root object for configuration file
 */
 type Configuration struct {
-	Api         Api         `yaml:"api"`
-	AuthService AuthService `yaml:"auth-service"`
-	UserService UserService `yaml:"user-service"`
+	Api Api `yaml:"api"`
 }
 
 /*

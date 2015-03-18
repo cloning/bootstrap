@@ -6,8 +6,6 @@ package api
 */
 
 import (
-	"../services/auth"
-	"../services/user"
 	"fmt"
 	"github.com/go-martini/martini"
 	"github.com/hydrogen18/stoppableListener"
@@ -17,11 +15,9 @@ import (
 )
 
 type Api struct {
-	port        int
-	wg          *sync.WaitGroup
-	authService *auth.AuthService
-	userService *user.UserService
-	sl          *stoppableListener.StoppableListener
+	port int
+	wg   *sync.WaitGroup
+	sl   *stoppableListener.StoppableListener
 }
 
 func (this *Api) Run() {
